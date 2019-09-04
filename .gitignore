@@ -1,0 +1,14 @@
+Thumbs.db
+Desktop.ini
+.DS_Strore
+*.exe
+._
+#*.git
+#*.gitignore
+*.svn
+*.vscode
+*.idea
+_notes
+*.BridgeSort
+*.BridgeLabelsAndRatings
+/node_modules/*
