@@ -12,3 +12,4 @@ _notes
 *.BridgeSort
 *.BridgeLabelsAndRatings
 /node_modules/*
+/dist/*
