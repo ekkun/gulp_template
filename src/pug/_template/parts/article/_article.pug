@@ -1,0 +1,9 @@
+mixin article(options)
+  ul.article
+    each item in patterns.items
+      li.item(id=`camouflage-patterns-${ item.id }`)
+        .item__inner
+          figure.item__figure
+            a.item__link(href="javascript:void(0)")
+              span.item__image(data-image-src= item.url)
+          figcaption.item__caption= item.name

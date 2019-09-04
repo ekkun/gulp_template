@@ -1,0 +1,38 @@
+// デバイス幅
+$sp-se-width: 320px;
+$sp-width: 425px;
+$sp-max-width: 767px;
+$tb-width: 768px;
+$pc-width: 1024px;
+$large-pc-width: 1440px;
+
+// ベースカラー
+$color: #000;
+$bg-color: #fff;
+$link-color: #000;
+$hover-color: #999;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  position: relative;
+  color: $color;
+  font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+  line-height: 160%;
+  width: 100%;
+  height: 100%;
+  background-color: $bg-color;
+  overflow: scroll;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
