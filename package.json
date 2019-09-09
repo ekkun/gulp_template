@@ -1,0 +1,62 @@
+{
+  "name": "gulp-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ekkun/gulp_template.git"
+  },
+  "keywords": [],
+  "author": "ekobayashi@fishing-v.co.jp",
+  "license": "",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "autoprefixer": "^9.6.1",
+    "babel-loader": "^8.0.6",
+    "browser-sync": "^2.26.7",
+    "del": "^5.1.0",
+    "eslint": "^6.3.0",
+    "eslint-plugin-eslint-comments": "^3.1.2",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^6.0.0",
+    "gulp-header": "^2.0.9",
+    "gulp-htmlhint": "^2.2.1",
+    "gulp-imagemin": "^6.1.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-order": "^1.2.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-prettify": "^0.5.0",
+    "gulp-pug": "^4.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-scss-lint": "^1.0.0",
+    "gulp-uglify": "^3.0.2",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-pngquant": "^8.0.0",
+    "postcss-assets": "^5.0.0",
+    "postcss-clean": "^1.1.0",
+    "postcss-flexbugs-fixes": "^4.1.0",
+    "postcss-sorting": "^5.0.1",
+    "webpack": "^4.39.3"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "firefox >= 4",
+    "safari 7",
+    "safari 8",
+    "IE 8",
+    "IE 9",
+    "IE 10",
+    "IE 11"
+  ]
+}
