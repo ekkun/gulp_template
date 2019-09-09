@@ -52,6 +52,10 @@ const paths = {
   images: {
     src: './src/images/**/*.{jpg,jpeg,png,svg,gif,ico}',
     dest: './dist/assets/images/'
+  },
+  fonts: {
+    src: './src/fonts/**/*.{woff,woff2,ttf,svg,eot}',
+    dest: './dist/assets/fonts/'
   }
 };
 // Post CSS
@@ -180,6 +184,16 @@ const images = () => {
     .pipe(gulp.dest(paths.images.dest));
 }
 
+// フォントファイルコピー
+const fonts = () => {
+  console.log('コピー');
+  return gulp
+    .src(paths.fonts.src, {
+      since: gulp.lastRun(fonts)
+    })
+    .pipe(gulp.dest(paths.fonts.dest));
+}
+
 // マップファイル削除
 const cleanMapFiles = () => {
   return del([paths.styles.map, paths.scripts.map]);
@@ -245,13 +259,13 @@ const watchFiles = (done) => {
   gulp.watch(paths.html.src).on('change', gulp.series(html, browserReload));
 }
 
-gulp.task('default', gulp.series(gulp.parallel(cleanDistFiles, images, scripts, styles, pugs, html), gulp.series(browsersync, watchFiles)));
+gulp.task('default', gulp.series(gulp.parallel(cleanDistFiles, images, scripts, styles, pugs, html, fonts), gulp.series(browsersync, watchFiles)));
 
 gulp.task('clean', cleanMapFiles);
 gulp.task('imagemin', images);
 gulp.task('sass-compress', sassCompress);
 gulp.task('del', cleanDistFiles);
-gulp.task('build', gulp.series(gulp.parallel('del', scripts, 'imagemin', 'sass-compress', pugs, html), 'clean'));
+gulp.task('build', gulp.series(gulp.parallel('del', scripts, 'imagemin', 'sass-compress', pugs, html, fonts), 'clean'));
 gulp.task('eslint', esLint);
 gulp.task('html-lint', htmlLint);
 gulp.task('sass-lint', sassLint);
