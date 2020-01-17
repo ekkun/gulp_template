@@ -94,7 +94,7 @@ const pugs = () => {
   return gulp
     .src(paths.pug.src, { since: gulp.lastRun(html) })
     .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
+      errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(pug({ pretty: true }))
     .pipe(gulp.dest(paths.pug.dest));
