@@ -42,23 +42,26 @@ $ gulp build
 │  └─ index.html など
 │
 ├─ src/（ビルド前のソース）
-│  ├─ html/ (直にHTMLを生成する場合)
 │  ├─ fonts/
+│  ├─ html/ (直にHTMLを生成する場合)
 │  ├─ images/
-│  ├─ sass/
-│  │  ├─ _partial/
-│  │  ├─ _base/
-│  │  ├─ _mixin/
-│  │  ├─ _module/
-│  │  ├─ _page/
-│  │  ├─ _pulgins/
-│  │  ├─ _setting/
-│  │  └─ style.scss
+│  ├─ javascript/
 │  ├─ js/
-│  │  ├─ _core/
 │  │  ├─ _app/
+│  │  ├─ _core/
 │  │  └─ functions.js など
-│  └─ index.pug など
+│  ├─ pug/
+│  │  ├─ _template/
+│  │  └─ index.pug
+│  └─ sass/
+│      ├─ _base/
+│      ├─ _mixin/
+│      ├─ _module/
+│      ├─ _page/
+│      │  └─ _index/
+│      ├─ _pulgins/
+│      ├─ _setting/
+│      └─ style.scss
 │
 ├─ postcss-sorting.json
 ├─ .eslintrc.json
@@ -66,4 +69,3 @@ $ gulp build
 ├─ package.json
 └─ README.md
 ```
-

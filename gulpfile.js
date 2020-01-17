@@ -41,6 +41,11 @@ const paths = {
     dest: './dist/assets/css',
     map: './dist/assets/css/maps'
   },
+  javascript: {
+    src: './src/javascript/**/*.js',
+    dest: './dist/assets/js',
+    map: './dist/assets/js/maps'
+  },
   scripts: {
     src: './src/js/**/*.js',
     jsx: './src/js/**/*.jsx',
@@ -139,6 +144,25 @@ const sassCompress = () => {
     .pipe(gulp.dest(paths.styles.dest));
 }
 
+// JS整形
+const javascript = () => {
+  return gulp
+    .src(paths.javascript.src, { sourcemaps: true })
+    .pipe(
+      babel({
+        presets: ['@babel/env']
+      })
+    )
+    .pipe(plumber())
+    //.pipe(uglify())
+    /*.pipe(
+      rename({
+        suffix: '.min'
+      })
+    )*/
+    .pipe(gulp.dest(paths.javascript.dest, { sourcemaps: './maps' }));
+}
+
 // JSコンパイル
 const scripts = () => {
   return gulp
@@ -196,7 +220,7 @@ const fonts = () => {
 
 // マップファイル削除
 const cleanMapFiles = () => {
-  return del([paths.styles.map, paths.scripts.map]);
+  return del([paths.styles.map, paths.javascript.map, paths.scripts.map]);
 }
 
 // Distributionディレクトリ削除
@@ -224,7 +248,7 @@ const sassLint = () => {
 // ESLint
 const esLint = () => {
   return gulp
-    .src([paths.scripts.src, paths.scripts.jsx, '!./src/js/core/**/*.js'])
+    .src([paths.javascript.src, paths.scripts.src, paths.scripts.jsx, '!./src/js/core/**/*.js'])
     .pipe(
       eslint({
         useEslintrc: true,
@@ -254,12 +278,13 @@ const watchFiles = (done) => {
     done();
   };
   gulp.watch(paths.styles.src).on('change', gulp.series(styles, browserReload));
+  gulp.watch(paths.javascript.src).on('change', gulp.series(javascript, esLint, browserReload));
   gulp.watch(paths.scripts.src).on('change', gulp.series(scripts, esLint, browserReload));
   gulp.watch(paths.pug.src).on('change', gulp.series(pugs, browserReload));
   gulp.watch(paths.html.src).on('change', gulp.series(html, browserReload));
 }
 
-gulp.task('default', gulp.series(gulp.parallel(cleanDistFiles, images, scripts, styles, pugs, html, fonts), gulp.series(browsersync, watchFiles)));
+gulp.task('default', gulp.series(gulp.parallel(cleanDistFiles, images, styles, javascript, scripts, pugs, html, fonts), gulp.series(browsersync, watchFiles)));
 
 gulp.task('clean', cleanMapFiles);
 gulp.task('imagemin', images);
