@@ -1,26 +1,38 @@
 extends ./_template/_layout
 
 block vars
-  //-
-    - var script = 'Top'
+  -
+    head.title = 'INDEX'
+    head.slug = 'index'
+    head.keywords = 'index, INDEX'
+    head.description = 'インデックスなんです...'
 
+block append head
+  script(src="", async)
+  script(src="https://www.googletagmanager.com/gtag/js?id=", async)
+  script
+    | window.dataLayer = window.dataLayer || [];
+    | function gtag(){dataLayer.push(arguments);}
+    | gtag('js', new Date());
+    | gtag('config', '');
+
+block append style
+  link(rel='stylesheet', href=`${ filePath }assets/css/index.css`)
 
 block includes
-  //- include ./_template/parts/article/datas/_index
-  //- include ./_template/parts/article/_article
+  include ./_template/parts/article/datas/_index
+  include ./_template/parts/article/_article
 
 block body
-
-  //-#background-image.background-image
-  //-  .background-image__inner
 
   main#main.main
     .main__inner
 
+  //- アーティクル
+  article
+    section.section
+      .section__inner
+        +article({})
 
-      //-
-        footer#footer.footer
-          .footer__inner
-
-  article.test あ
-
+block append scripts
+  //- script(src=`${ filePath }assets/js/main.min.js`)

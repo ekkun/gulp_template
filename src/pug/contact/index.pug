@@ -1,26 +1,27 @@
 extends ../_template/_layout
 
 block vars
-  //-
-    - var script = 'Top'
+  -
+    head.title = 'CONTACT'
+    head.slug = 'contact'
+    head.keywords = ''
+    head.description = 'コンタクトページなんです！'
 
+block append head
+
+block append style
+  link(rel='stylesheet', href=`${ filePath }assets/css/contact.css`)
 
 block includes
-  //- include ./_template/parts/article/datas/_index
-  //- include ./_template/parts/article/_article
 
 block body
-
-  //-#background-image.background-image
-  //-  .background-image__inner
-
   main#main.main
     .main__inner
 
 
-      //-
-        footer#footer.footer
-          .footer__inner
+  //- アーティクル
+  article.contact コンタクトページなんです！
 
-  article.test あ
-  article.test い
+block append scripts
+  //-
+    script(src=`${ filePath }assets/js/contact.js`)

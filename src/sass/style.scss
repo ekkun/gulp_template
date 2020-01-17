@@ -1,14 +1,19 @@
 @charset 'utf-8';
 
-// BASE
-@import '_base/_base';
+// Setting
+@import './_setting/_config';
+@import './_setting/_function';
 
 // mixin
-@import '_mixin/_mixin';
+@import './_mixin/_mixin';
+
+// Base
+@import './_base/_normalize';
+@import './_base/_reboot';
+//@import './_base/_reset';
+@import './_base/_base';
 
 // Module
-@import '_module/_header';
-@import '_module/_main';
-@import '_module/_footer';
-
-
+@import './_module/_header';
+@import './_module/_main';
+@import './_module/_footer';
