@@ -43,6 +43,7 @@ const paths = {
   },
   javascript: {
     src: './src/javascript/**/*.js',
+    jsx: './src/javascript/**/*.jsx',
     dest: './dist/assets/js',
     map: './dist/assets/js/maps'
   },
@@ -248,7 +249,7 @@ const sassLint = () => {
 // ESLint
 const esLint = () => {
   return gulp
-    .src([paths.javascript.src, paths.scripts.src, paths.scripts.jsx, '!./src/js/core/**/*.js'])
+    .src([paths.javascript.src, paths.javascript.jsx, paths.scripts.src, paths.scripts.jsx, '!./src/js/core/**/*.js'])
     .pipe(
       eslint({
         useEslintrc: true,
@@ -279,7 +280,9 @@ const watchFiles = (done) => {
   };
   gulp.watch(paths.styles.src).on('change', gulp.series(styles, browserReload));
   gulp.watch(paths.javascript.src).on('change', gulp.series(javascript, esLint, browserReload));
+  gulp.watch(paths.javascript.jsx).on('change', gulp.series(javascript, esLint, browserReload));
   gulp.watch(paths.scripts.src).on('change', gulp.series(scripts, esLint, browserReload));
+  gulp.watch(paths.scripts.jsx).on('change', gulp.series(scripts, esLint, browserReload));
   gulp.watch(paths.pug.src).on('change', gulp.series(pugs, browserReload));
   gulp.watch(paths.html.src).on('change', gulp.series(html, browserReload));
 }
