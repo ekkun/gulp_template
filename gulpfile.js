@@ -25,6 +25,7 @@ const sass = require('gulp-sass');
 const scsslint = require('gulp-scss-lint');
 const sorting = require('postcss-sorting');
 const uglify = require('gulp-uglify');
+const include = require('gulp-include');
 const paths = {
   root: './src',
   dest: './dist/',
@@ -149,6 +150,7 @@ const sassCompress = () => {
 const javascript = () => {
   return gulp
     .src(paths.javascript.src, { sourcemaps: true })
+    .pipe(include()).on('error', console.log)
     .pipe(
       babel({
         presets: ['@babel/env']
@@ -169,6 +171,7 @@ const scripts = () => {
   return gulp
     .src(paths.scripts.src, { sourcemaps: true })
     .pipe(order([paths.scripts.core, paths.scripts.app], { base: './' }))
+    .pipe(include()).on('error', console.log)
     .pipe(
       babel({
         presets: ['@babel/env']

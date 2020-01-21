@@ -4,6 +4,8 @@
  * @author eiji@ekkun.com
  * @license -
  */
+//=require include/include.js
+
 $(function () {
   const $body = document.body;
   const dataApp = $body.dataset.app;
