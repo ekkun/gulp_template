@@ -26,6 +26,7 @@ const scsslint = require('gulp-scss-lint');
 const sorting = require('postcss-sorting');
 const uglify = require('gulp-uglify');
 const include = require('gulp-include');
+const stripCssComments = require('gulp-strip-css-comments');
 const paths = {
   root: './src',
   dest: './dist/',
@@ -137,12 +138,17 @@ const sassCompress = () => {
     )
     .pipe(
       sass({
-        outputStyle: 'compressed'
-      })
-    )
+        outputStyle: 'compact'
+      }).on('error', sass.logError)) // nested | expanded | compact | compressed
     .pipe(replace(/@charset "UTF-8";/g, ''))
     .pipe(header('@charset "UTF-8";\n\n'))
     .pipe(postcss(postcssOption, [clean()]))
+    .pipe(stripCssComments({
+      preserve: false
+      //preserve: /^#/
+    }))
+    .pipe(replace('\n\n', '\n'))
+    .pipe(replace(/^\n/gm, ''))
     .pipe(gulp.dest(paths.styles.dest));
 }
 

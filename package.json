@@ -41,6 +41,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-scss-lint": "^1.0.0",
     "gulp-uglify": "^3.0.2",
+    "gulp-strip-css-comments": "^2.0.0",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "postcss-assets": "^5.0.0",
