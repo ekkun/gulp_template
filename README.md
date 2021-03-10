@@ -72,3 +72,17 @@ $ gulp build
 ├─ package.json
 └─ README.md
 ```
+
+## パッケージのバージョン管理
+
+更新、アップデートの確認に npm-check-updates をインストールする
+
+```
+$ sudo npm install -g npm-check-updates
+```
+
+ncu コマンドでアップデート
+
+```
+$ ncu -u
+```
