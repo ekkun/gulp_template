@@ -1,6 +1,8 @@
 # Gulp Template
 
-## npmパッケージをインストール
+For node v14.15.4
+
+## npm パッケージをインストール
 
 ```
 #プロジェクトのディレクトリに移動して
@@ -25,9 +27,9 @@ $ gulp build
 
 ./src/ 内のファイルを編集
 
-+ pug -> html
-+ js -> babel -> js
-+ sass -> css
+- pug -> html
+- js -> babel -> js
+- sass -> css
 
 ```
 ├─ node_modules/
