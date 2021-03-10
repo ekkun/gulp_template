@@ -40,7 +40,8 @@ $ gulp build
 │  │  ├─ fonts/
 │  │  ├─ images/
 │  │  ├─ css/
-│  │  └─ js/
+│  │  ├─ js/
+│  │  └─ json/
 │  └─ index.html など
 │
 ├─ src/（ビルド前のソース）
@@ -52,18 +53,18 @@ $ gulp build
 │  │  ├─ _app/
 │  │  ├─ _core/
 │  │  └─ functions.js など
+│  ├─ json/
 │  ├─ pug/
 │  │  ├─ _template/
 │  │  └─ index.pug
 │  └─ sass/
-│      ├─ _base/
-│      ├─ _mixin/
-│      ├─ _module/
-│      ├─ _page/
-│      │  └─ _index/
-│      ├─ _pulgins/
-│      ├─ _setting/
-│      └─ style.scss
+│      ├─ foundation/
+│      ├─ layout/
+│      ├─ object/
+│      ├─ page/
+│      │  └─ index/
+│      ├─ style.scss
+│      └─ index.scss
 │
 ├─ postcss-sorting.json
 ├─ .eslintrc.json

@@ -32,22 +32,22 @@ const paths = {
   dest: './dist/',
   html: {
     src: './src/html/**/*.html',
-    dest: './dist/'
+    dest: './dist/',
   },
   pug: {
     src: './src/pug/**/!(_)*.pug',
-    dest: './dist/'
+    dest: './dist/',
   },
   styles: {
     src: './src/sass/**/*.scss',
     dest: './dist/assets/css',
-    map: './dist/assets/css/maps'
+    map: './dist/assets/css/maps',
   },
   javascript: {
     src: './src/javascript/**/*.js',
     jsx: './src/javascript/**/*.jsx',
     dest: './dist/assets/js',
-    map: './dist/assets/js/maps'
+    map: './dist/assets/js/maps',
   },
   scripts: {
     src: './src/js/**/*.js',
@@ -55,20 +55,24 @@ const paths = {
     dest: './dist/assets/js',
     map: './dist/assets/js/maps',
     core: 'src/js/core/**/*.js',
-    app: 'src/js/app/**/*.js'
+    app: 'src/js/app/**/*.js',
   },
   images: {
     src: './src/images/**/*.{jpg,jpeg,png,svg,gif,ico}',
-    dest: './dist/assets/images/'
+    dest: './dist/assets/images/',
+  },
+  json: {
+    src: './src/json/**/*.json',
+    dest: './dist/assets/json/',
   },
   fonts: {
     src: './src/fonts/**/*.{woff,woff2,ttf,svg,eot}',
-    dest: './dist/assets/fonts/'
-  }
+    dest: './dist/assets/fonts/',
+  },
 };
 // Post CSS
 const autoprefixerOption = {
-  grid: true
+  grid: true,
 };
 const sortingOptions = require('./postcss-sorting.json');
 const postcssOption = [
@@ -76,11 +80,11 @@ const postcssOption = [
     baseUrl: '/',
     basePath: 'src/',
     loadPaths: ['images/'],
-    cachebuster: true
+    cachebuster: true,
   }),
   flexBugsFixes,
   autoprefixer(autoprefixerOption),
-  sorting(sortingOptions)
+  sorting(sortingOptions),
 ];
 
 // HTML整形
@@ -91,22 +95,24 @@ const html = () => {
       prettify({
         indent_char: ' ',
         indent_size: 2,
-        unformatted: ['a', 'span', 'br']
-      }),
+        unformatted: ['a', 'span', 'br'],
+      })
     )
     .pipe(gulp.dest(paths.html.dest));
-}
+};
 
 // PUG整形
 const pugs = () => {
   return gulp
     .src(paths.pug.src, { since: gulp.lastRun(html) })
-    .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
-    }))
+    .pipe(
+      plumber({
+        errorHandler: notify.onError('Error: <%= error.message %>'),
+      })
+    )
     .pipe(pug({ pretty: true }))
     .pipe(gulp.dest(paths.pug.dest));
-}
+};
 
 // Sassコンパイル(非圧縮)
 const styles = () => {
@@ -119,68 +125,75 @@ const styles = () => {
     )
     .pipe(
       sass({
-        outputStyle: 'expanded'
-      }),
+        outputStyle: 'expanded',
+      })
     )
     .pipe(replace(/@charset "UTF-8";/g, ''))
     .pipe(header('@charset "UTF-8";\n\n'))
     .pipe(postcss(postcssOption))
     .pipe(gulp.dest(paths.styles.dest, { sourcemaps: './maps' }));
-}
+};
 // Sassコンパイル(圧縮)
 const sassCompress = () => {
   return gulp
     .src(paths.styles.src)
     .pipe(
       plumber({
-        errorHandler: notify.onError('<%= error.message %>')
+        errorHandler: notify.onError('<%= error.message %>'),
       })
     )
     .pipe(
       sass({
-        outputStyle: 'compact'
-      }).on('error', sass.logError)) // nested | expanded | compact | compressed
+        outputStyle: 'compact',
+      }).on('error', sass.logError)
+    ) // nested | expanded | compact | compressed
     .pipe(replace(/@charset "UTF-8";/g, ''))
     .pipe(header('@charset "UTF-8";\n\n'))
     .pipe(postcss(postcssOption, [clean()]))
-    .pipe(stripCssComments({
-      preserve: false
-      //preserve: /^#/
-    }))
+    .pipe(
+      stripCssComments({
+        preserve: false,
+        //preserve: /^#/
+      })
+    )
     .pipe(replace('\n\n', '\n'))
     .pipe(replace(/^\n/gm, ''))
     .pipe(gulp.dest(paths.styles.dest));
-}
+};
 
 // JS整形
 const javascript = () => {
-  return gulp
-    .src(paths.javascript.src, { sourcemaps: true })
-    .pipe(include()).on('error', console.log)
-    .pipe(
-      babel({
-        presets: ['@babel/env']
-      })
-    )
-    .pipe(plumber())
-    //.pipe(uglify())
-    /*.pipe(
+  return (
+    gulp
+      .src(paths.javascript.src, { sourcemaps: true })
+      .pipe(include())
+      .on('error', console.log)
+      .pipe(
+        babel({
+          presets: ['@babel/env'],
+        })
+      )
+      .pipe(plumber())
+      //.pipe(uglify())
+      /*.pipe(
       rename({
         suffix: '.min'
       })
     )*/
-    .pipe(gulp.dest(paths.javascript.dest, { sourcemaps: './maps' }));
-}
+      .pipe(gulp.dest(paths.javascript.dest, { sourcemaps: './maps' }))
+  );
+};
 
 // JSコンパイル
 const scripts = () => {
   return gulp
     .src(paths.scripts.src, { sourcemaps: true })
     .pipe(order([paths.scripts.core, paths.scripts.app], { base: './' }))
-    .pipe(include()).on('error', console.log)
+    .pipe(include())
+    .on('error', console.log)
     .pipe(
       babel({
-        presets: ['@babel/env']
+        presets: ['@babel/env'],
       })
     )
     .pipe(plumber())
@@ -188,121 +201,171 @@ const scripts = () => {
     .pipe(uglify())
     .pipe(
       rename({
-        suffix: '.min'
+        suffix: '.min',
       })
     )
     .pipe(gulp.dest(paths.scripts.dest, { sourcemaps: './maps' }));
-}
+};
 
 // 画像最適化
 const imageminOption = [
   pngquant({
-    quality: [0.7, 0.85]
+    quality: [0.7, 0.85],
   }),
   mozjpeg({
-    quality: 85
+    quality: 85,
   }),
   imagemin.gifsicle(),
   imagemin.jpegtran(),
   imagemin.optipng(),
   imagemin.svgo({
-    removeViewBox: false
-  })
+    removeViewBox: false,
+  }),
 ];
 const images = () => {
   return gulp
     .src(paths.images.src, {
-      since: gulp.lastRun(images)
+      since: gulp.lastRun(images),
     })
     .pipe(imagemin(imageminOption))
     .pipe(gulp.dest(paths.images.dest));
-}
+};
+
+// JSONファイルコピー
+const json = () => {
+  console.log('コピー');
+  return gulp
+    .src(paths.json.src, {
+      since: gulp.lastRun(json),
+    })
+    .pipe(gulp.dest(paths.json.dest));
+};
 
 // フォントファイルコピー
 const fonts = () => {
   console.log('コピー');
   return gulp
     .src(paths.fonts.src, {
-      since: gulp.lastRun(fonts)
+      since: gulp.lastRun(fonts),
     })
     .pipe(gulp.dest(paths.fonts.dest));
-}
+};
 
 // マップファイル削除
 const cleanMapFiles = () => {
   return del([paths.styles.map, paths.javascript.map, paths.scripts.map]);
-}
+};
 
 // Distributionディレクトリ削除
 const cleanDistFiles = () => {
-  return del([
-    'dist/**/*'
-  ]);
-}
+  return del(['dist/**/*']);
+};
 
 // HTML Lint
 const htmlLint = () => {
-  return gulp
-    .src(paths.html.src)
-    .pipe(htmlhint())
-    .pipe(htmlhint.reporter());
-}
+  return gulp.src(paths.html.src).pipe(htmlhint()).pipe(htmlhint.reporter());
+};
 // SASS Lint
 const sassLint = () => {
   return gulp.src(paths.styles.src).pipe(
     scsslint({
-      config: 'scss-lint.yml'
+      config: 'scss-lint.yml',
     })
   );
-}
+};
 // ESLint
 const esLint = () => {
   return gulp
-    .src([paths.javascript.src, paths.javascript.jsx, paths.scripts.src, paths.scripts.jsx, '!./src/js/core/**/*.js'])
+    .src([
+      paths.javascript.src,
+      paths.javascript.jsx,
+      paths.scripts.src,
+      paths.scripts.jsx,
+      '!./src/js/core/**/*.js',
+    ])
     .pipe(
       eslint({
         useEslintrc: true,
-        fix: true
+        fix: true,
       })
     )
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
-}
+};
 
 // ブラウザ更新＆ウォッチタスク
 const browserSyncOption = {
   port: 4000,
   server: {
     baseDir: './dist/',
-    index: 'index.html'
+    index: 'index.html',
   },
-  reloadOnRestart: true
+  reloadOnRestart: true,
 };
 const browsersync = (done) => {
   browserSync.init(browserSyncOption);
   done();
-}
+};
 const watchFiles = (done) => {
   const browserReload = () => {
     browserSync.reload();
     done();
   };
   gulp.watch(paths.styles.src).on('change', gulp.series(styles, browserReload));
-  gulp.watch(paths.javascript.src).on('change', gulp.series(javascript, esLint, browserReload));
-  gulp.watch(paths.javascript.jsx).on('change', gulp.series(javascript, esLint, browserReload));
-  gulp.watch(paths.scripts.src).on('change', gulp.series(scripts, esLint, browserReload));
-  gulp.watch(paths.scripts.jsx).on('change', gulp.series(scripts, esLint, browserReload));
+  gulp
+    .watch(paths.javascript.src)
+    .on('change', gulp.series(javascript, esLint, browserReload));
+  gulp
+    .watch(paths.javascript.jsx)
+    .on('change', gulp.series(javascript, esLint, browserReload));
+  gulp
+    .watch(paths.scripts.src)
+    .on('change', gulp.series(scripts, esLint, browserReload));
+  gulp
+    .watch(paths.scripts.jsx)
+    .on('change', gulp.series(scripts, esLint, browserReload));
   gulp.watch(paths.pug.src).on('change', gulp.series(pugs, browserReload));
   gulp.watch(paths.html.src).on('change', gulp.series(html, browserReload));
-}
+};
 
-gulp.task('default', gulp.series(gulp.parallel(cleanDistFiles, images, styles, javascript, scripts, pugs, html, fonts), gulp.series(browsersync, watchFiles)));
+gulp.task(
+  'default',
+  gulp.series(
+    gulp.parallel(
+      cleanDistFiles,
+      images,
+      styles,
+      javascript,
+      scripts,
+      pugs,
+      html,
+      json,
+      fonts
+    ),
+    gulp.series(browsersync, watchFiles)
+  )
+);
 
 gulp.task('clean', cleanMapFiles);
 gulp.task('imagemin', images);
 gulp.task('sass-compress', sassCompress);
 gulp.task('del', cleanDistFiles);
-gulp.task('build', gulp.series(gulp.parallel('del', scripts, 'imagemin', 'sass-compress', pugs, html, fonts), 'clean'));
+gulp.task(
+  'build',
+  gulp.series(
+    gulp.parallel(
+      'del',
+      scripts,
+      'imagemin',
+      'sass-compress',
+      pugs,
+      html,
+      json,
+      fonts
+    ),
+    'clean'
+  )
+);
 gulp.task('eslint', esLint);
 gulp.task('html-lint', htmlLint);
 gulp.task('sass-lint', sassLint);
