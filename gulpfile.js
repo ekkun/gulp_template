@@ -27,6 +27,8 @@ const sorting = require('postcss-sorting');
 const uglify = require('gulp-uglify');
 const include = require('gulp-include');
 const stripCssComments = require('gulp-strip-css-comments');
+const sassGlob = require('gulp-sass-glob');
+const gcmq = require('gulp-group-css-media-queries');
 const paths = {
   root: './src',
   dest: './dist/',
@@ -135,30 +137,34 @@ const styles = () => {
 };
 // Sassコンパイル(圧縮)
 const sassCompress = () => {
-  return gulp
-    .src(paths.styles.src)
-    .pipe(
-      plumber({
-        errorHandler: notify.onError('<%= error.message %>'),
-      })
-    )
-    .pipe(
-      sass({
-        outputStyle: 'compact',
-      }).on('error', sass.logError)
-    ) // nested | expanded | compact | compressed
-    .pipe(replace(/@charset "UTF-8";/g, ''))
-    .pipe(header('@charset "UTF-8";\n\n'))
-    .pipe(postcss(postcssOption, [clean()]))
-    .pipe(
-      stripCssComments({
-        preserve: false,
-        //preserve: /^#/
-      })
-    )
-    .pipe(replace('\n\n', '\n'))
-    .pipe(replace(/^\n/gm, ''))
-    .pipe(gulp.dest(paths.styles.dest));
+  return (
+    gulp
+      .src(paths.styles.src)
+      .pipe(
+        plumber({
+          errorHandler: notify.onError('<%= error.message %>'),
+        })
+      )
+      //.pipe(sassGlob())
+      .pipe(
+        sass({
+          outputStyle: 'compact',
+        }).on('error', sass.logError)
+      ) // nested | expanded | compact | compressed
+      .pipe(replace(/@charset "UTF-8";/g, ''))
+      .pipe(header('@charset "UTF-8";\n\n'))
+      .pipe(postcss(postcssOption, [clean()]))
+      //.pipe(gcmq())
+      .pipe(
+        stripCssComments({
+          preserve: false,
+          //preserve: /^#/
+        })
+      )
+      .pipe(replace('\n\n', '\n'))
+      .pipe(replace(/^\n/gm, ''))
+      .pipe(gulp.dest(paths.styles.dest))
+  );
 };
 
 // JS整形
