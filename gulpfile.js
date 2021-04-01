@@ -1,3 +1,5 @@
+const { src, dest, watch, series, parallel, lastRun } = require('gulp');
+//const gulp = require('gulp');
 const assets = require('postcss-assets');
 const autoprefixer = require('autoprefixer');
 const babel = require('gulp-babel');
@@ -8,7 +10,6 @@ const del = require('del');
 const pug = require('gulp-pug');
 const eslint = require('gulp-eslint');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
-const gulp = require('gulp');
 const htmlhint = require('gulp-htmlhint');
 const header = require('gulp-header');
 const imagemin = require('gulp-imagemin');
@@ -91,8 +92,7 @@ const postcssOption = [
 
 // HTML整形
 const html = () => {
-  return gulp
-    .src(paths.html.src, { since: gulp.lastRun(html) })
+  return src(paths.html.src, { since: lastRun(html) })
     .pipe(
       prettify({
         indent_char: ' ',
@@ -100,26 +100,24 @@ const html = () => {
         unformatted: ['a', 'span', 'br'],
       })
     )
-    .pipe(gulp.dest(paths.html.dest));
+    .pipe(dest(paths.html.dest));
 };
 
 // PUG整形
 const pugs = () => {
-  return gulp
-    .src(paths.pug.src, { since: gulp.lastRun(html) })
+  return src(paths.pug.src, { since: lastRun(html) })
     .pipe(
       plumber({
         errorHandler: notify.onError('Error: <%= error.message %>'),
       })
     )
     .pipe(pug({ pretty: true }))
-    .pipe(gulp.dest(paths.pug.dest));
+    .pipe(dest(paths.pug.dest));
 };
 
 // Sassコンパイル(非圧縮)
 const styles = () => {
-  return gulp
-    .src(paths.styles.src, { sourcemaps: true })
+  return src(paths.styles.src, { sourcemaps: true })
     .pipe(
       plumber({
         errorHandler: notify.onError('<%= error.message %>'),
@@ -133,13 +131,12 @@ const styles = () => {
     .pipe(replace(/@charset "UTF-8";/g, ''))
     .pipe(header('@charset "UTF-8";\n\n'))
     .pipe(postcss(postcssOption))
-    .pipe(gulp.dest(paths.styles.dest, { sourcemaps: './maps' }));
+    .pipe(dest(paths.styles.dest, { sourcemaps: './maps' }));
 };
 // Sassコンパイル(圧縮)
 const sassCompress = () => {
   return (
-    gulp
-      .src(paths.styles.src)
+    src(paths.styles.src)
       .pipe(
         plumber({
           errorHandler: notify.onError('<%= error.message %>'),
@@ -163,15 +160,14 @@ const sassCompress = () => {
       )
       .pipe(replace('\n\n', '\n'))
       .pipe(replace(/^\n/gm, ''))
-      .pipe(gulp.dest(paths.styles.dest))
+      .pipe(dest(paths.styles.dest))
   );
 };
 
 // JS整形
 const javascript = () => {
   return (
-    gulp
-      .src(paths.javascript.src, { sourcemaps: true })
+    src(paths.javascript.src, { sourcemaps: true })
       .pipe(include())
       .on('error', console.log)
       .pipe(
@@ -186,14 +182,13 @@ const javascript = () => {
         suffix: '.min'
       })
     )*/
-      .pipe(gulp.dest(paths.javascript.dest, { sourcemaps: './maps' }))
+      .pipe(dest(paths.javascript.dest, { sourcemaps: './maps' }))
   );
 };
 
 // JSコンパイル
 const scripts = () => {
-  return gulp
-    .src(paths.scripts.src, { sourcemaps: true })
+  return src(paths.scripts.src, { sourcemaps: true })
     .pipe(order([paths.scripts.core, paths.scripts.app], { base: './' }))
     .pipe(include())
     .on('error', console.log)
@@ -210,7 +205,7 @@ const scripts = () => {
         suffix: '.min',
       })
     )
-    .pipe(gulp.dest(paths.scripts.dest, { sourcemaps: './maps' }));
+    .pipe(dest(paths.scripts.dest, { sourcemaps: './maps' }));
 };
 
 // 画像最適化
@@ -229,32 +224,27 @@ const imageminOption = [
   imagemin.svgo({ removeViewBox: true }, { cleanupIDs: false }),
 ];
 const images = () => {
-  return gulp
-    .src(paths.images.src, {
-      since: gulp.lastRun(images),
-    })
+  return src(paths.images.src, {
+    since: lastRun(images),
+  })
     .pipe(imagemin(imageminOption))
-    .pipe(gulp.dest(paths.images.dest));
+    .pipe(dest(paths.images.dest));
 };
 
 // JSONファイルコピー
 const json = () => {
-  console.log('コピー');
-  return gulp
-    .src(paths.json.src, {
-      since: gulp.lastRun(json),
-    })
-    .pipe(gulp.dest(paths.json.dest));
+  console.log('JSON コピー');
+  return src(paths.json.src, {
+    since: lastRun(json),
+  }).pipe(dest(paths.json.dest));
 };
 
 // フォントファイルコピー
 const fonts = () => {
-  console.log('コピー');
-  return gulp
-    .src(paths.fonts.src, {
-      since: gulp.lastRun(fonts),
-    })
-    .pipe(gulp.dest(paths.fonts.dest));
+  console.log('FONTS コピー');
+  return src(paths.fonts.src, {
+    since: lastRun(fonts),
+  }).pipe(dest(paths.fonts.dest));
 };
 
 // マップファイル削除
@@ -269,11 +259,11 @@ const cleanDistFiles = () => {
 
 // HTML Lint
 const htmlLint = () => {
-  return gulp.src(paths.html.src).pipe(htmlhint()).pipe(htmlhint.reporter());
+  return src(paths.html.src).pipe(htmlhint()).pipe(htmlhint.reporter());
 };
 // SASS Lint
 const sassLint = () => {
-  return gulp.src(paths.styles.src).pipe(
+  return src(paths.styles.src).pipe(
     scsslint({
       config: 'scss-lint.yml',
     })
@@ -281,14 +271,13 @@ const sassLint = () => {
 };
 // ESLint
 const esLint = () => {
-  return gulp
-    .src([
-      paths.javascript.src,
-      paths.javascript.jsx,
-      paths.scripts.src,
-      paths.scripts.jsx,
-      '!./src/js/core/**/*.js',
-    ])
+  return src([
+    paths.javascript.src,
+    paths.javascript.jsx,
+    paths.scripts.src,
+    paths.scripts.jsx,
+    '!./src/js/core/**/*.js',
+  ])
     .pipe(
       eslint({
         useEslintrc: true,
@@ -317,62 +306,53 @@ const watchFiles = (done) => {
     browserSync.reload();
     done();
   };
-  gulp.watch(paths.styles.src).on('change', gulp.series(styles, browserReload));
-  gulp
-    .watch(paths.javascript.src)
-    .on('change', gulp.series(javascript, esLint, browserReload));
-  gulp
-    .watch(paths.javascript.jsx)
-    .on('change', gulp.series(javascript, esLint, browserReload));
-  gulp
-    .watch(paths.scripts.src)
-    .on('change', gulp.series(scripts, esLint, browserReload));
-  gulp
-    .watch(paths.scripts.jsx)
-    .on('change', gulp.series(scripts, esLint, browserReload));
-  gulp.watch(paths.pug.src).on('change', gulp.series(pugs, browserReload));
-  gulp.watch(paths.html.src).on('change', gulp.series(html, browserReload));
+  watch(paths.styles.src).on('change', series(styles, browserReload));
+  watch(paths.javascript.src).on(
+    'change',
+    series(javascript, esLint, browserReload)
+  );
+  watch(paths.javascript.jsx).on(
+    'change',
+    series(javascript, esLint, browserReload)
+  );
+  watch(paths.scripts.src).on('change', series(scripts, esLint, browserReload));
+  watch(paths.scripts.jsx).on('change', series(scripts, esLint, browserReload));
+  watch(paths.pug.src).on('change', series(pugs, browserReload));
+  watch(paths.html.src).on('change', series(html, browserReload));
 };
 
-gulp.task(
-  'default',
-  gulp.series(
-    gulp.parallel(
-      cleanDistFiles,
-      images,
-      styles,
-      javascript,
-      scripts,
-      pugs,
-      html,
-      json,
-      fonts
-    ),
-    gulp.series(browsersync, watchFiles)
-  )
+exports.default = series(
+  parallel(
+    cleanDistFiles,
+    images,
+    styles,
+    javascript,
+    scripts,
+    pugs,
+    html,
+    json,
+    fonts
+  ),
+  series(browsersync, watchFiles)
 );
-
-gulp.task('clean', cleanMapFiles);
-gulp.task('imagemin', images);
-gulp.task('sass-compress', sassCompress);
-gulp.task('del', cleanDistFiles);
-gulp.task(
-  'build',
-  gulp.series(
-    gulp.parallel(
-      'del',
-      scripts,
-      'imagemin',
-      'sass-compress',
-      pugs,
-      html,
-      json,
-      fonts
-    ),
-    'clean'
-  )
+exports.clean = cleanMapFiles;
+exports.imagemin = images;
+exports.sasscompress = sassCompress;
+exports.del = cleanDistFiles;
+exports.build = series(
+  parallel(
+    cleanDistFiles,
+    scripts,
+    images,
+    sassCompress,
+    pugs,
+    html,
+    json,
+    fonts
+  ),
+  cleanMapFiles
 );
-gulp.task('eslint', esLint);
-gulp.task('html-lint', htmlLint);
-gulp.task('sass-lint', sassLint);
-gulp.task('test', gulp.series(sassLint, esLint, htmlLint));
+exports.eslint = esLint;
+exports.htmllint = htmlLint;
+exports.sasslint = sassLint;
+exports.test = series(sassLint, esLint, htmlLint);
