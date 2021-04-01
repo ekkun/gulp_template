@@ -221,12 +221,12 @@ const imageminOption = [
   mozjpeg({
     quality: 85,
   }),
-  imagemin.gifsicle(),
+  imagemin.gifsicle({
+    interlaced: false,
+  }),
   imagemin.jpegtran(),
   imagemin.optipng(),
-  imagemin.svgo({
-    removeViewBox: false,
-  }),
+  imagemin.svgo({ removeViewBox: true }, { cleanupIDs: false }),
 ];
 const images = () => {
   return gulp
