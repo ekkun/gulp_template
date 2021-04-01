@@ -13,3 +13,4 @@ _notes
 *.BridgeLabelsAndRatings
 /node_modules/*
 /dist/*
+*.code-workspace
