@@ -4,18 +4,20 @@
  * @author eiji@ekkun.com
  * @license -
  */
+//=require include/include.js
+
 window.addEventListener('load', () => {
   const $body = document.body;
   const dataApp = $body.dataset.app;
   if (!dataApp) {
     return false;
   }
-  if (dataApp == 'contact') {
+  if (dataApp == 'index') {
     // body のデータ属性が一致した場合 js を処理
-    contact();
+    index();
   }
 });
 
-const contact = () => {
-  console.log('CONTACT');
+const index = () => {
+  console.log('INDEXでーす！');
 };

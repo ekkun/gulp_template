@@ -4,11 +4,11 @@
  * @author eiji@ekkun.com
  * @license -
  */
-$(function () {
+window.addEventListener('load', () => {
   printConsoleLog();
 });
 
 const printConsoleLog = () => {
   console.log('わーい！');
   console.log('共通のファンクションですー！');
-}
+};
