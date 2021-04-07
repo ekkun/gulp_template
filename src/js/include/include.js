@@ -10,4 +10,4 @@ window.addEventListener('load', () => {
 
 const include = () => {
   console.log('インクルードしちゃったんです！');
-}
+};
