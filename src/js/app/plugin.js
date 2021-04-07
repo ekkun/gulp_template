@@ -1,3 +1,4 @@
 /**
- * jQueryなどのプラグインを格納
+ * 各種APP JSを格納
  */
+console.info('APPです');
