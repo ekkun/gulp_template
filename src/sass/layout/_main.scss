@@ -1,7 +1,11 @@
 .main {
+  display: block;
+  width: 100%;
   border: 1px solid #000;
   margin: 0;
-  width: 100%;
-  display: block;
   box-sizing: border-box;
+
+  @media screen and (min-width: $pc-width) {
+    max-width: $pc-width;
+  }
 }
