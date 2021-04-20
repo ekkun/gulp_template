@@ -1,4 +1,5 @@
-"use strict";
-var test = 'Hello World';
-console.log(test);
-//# sourceMappingURL=app.js.map
+'use strict';
+
+import './components/index.js';
+import './components/contact.js';
+import './components/include.js';
