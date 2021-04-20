@@ -4,12 +4,7 @@
 
 window.addEventListener('load', () => {});
 window.addEventListener('DOMContentLoaded', () => {});
-const App = () => {
-  const $body = document.body;
-  const dataApp = $body.dataset.app;
-  if (!dataApp) {
-    return false;
-  }
-  return dataApp;
+const functions = (arg) => {
+  console.info(arg);
 };
-export default App;
+export default functions;

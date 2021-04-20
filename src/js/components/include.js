@@ -1,11 +1,8 @@
 /**
  * INCLUDE TEST
  */
+import functions from './functions.js';
 
 window.addEventListener('load', () => {
-  include();
+  functions('インクルードしちゃったんです！');
 });
-
-const include = () => {
-  console.log('インクルードしちゃったんです！');
-};
