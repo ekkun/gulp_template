@@ -65,7 +65,12 @@ html(lang='ja')
           | gtag('config', '');
 
   body(data-app=`${ head.slug }`)
-    block body
+    if (isIndex)
+      include ./_header
+
+    block main
+
+    include ./_footer
 
     block scripts
       script(src=`${ filePath }assets/js/main.min.js`)

@@ -30,6 +30,15 @@ const include = require('gulp-include');
 const stripCssComments = require('gulp-strip-css-comments');
 const sassGlob = require('gulp-sass-glob');
 const gcmq = require('gulp-group-css-media-queries');
+const cleanCSS = require('gulp-clean-css');
+const mode = require('gulp-mode')({
+  modes: ['production', 'development'], // 本番実装時は 'gulp --production'
+  default: 'development',
+  verbose: false,
+});
+const webpack = require('webpack');
+const webpackStream = require('webpack-stream');
+const webpackConfig = require('./webpack.config');
 const paths = {
   root: './src',
   dest: './dist/',
@@ -125,7 +134,7 @@ const styles = () => {
     )
     .pipe(
       sass({
-        outputStyle: 'expanded',
+        outputStyle: 'nested',
       })
     )
     .pipe(replace(/@charset "UTF-8";/g, ''))
@@ -133,6 +142,7 @@ const styles = () => {
     .pipe(postcss(postcssOption))
     .pipe(dest(paths.styles.dest, { sourcemaps: './maps' }));
 };
+
 // Sassコンパイル(圧縮)
 const sassCompress = () => {
   return (
@@ -143,15 +153,16 @@ const sassCompress = () => {
         })
       )
       //.pipe(sassGlob())
+      .pipe(sass({ outputStyle: 'compact' }))
       .pipe(
         sass({
-          outputStyle: 'compact',
+          outputStyle: 'nested',
         }).on('error', sass.logError)
       ) // nested | expanded | compact | compressed
+      .pipe(gcmq())
       .pipe(replace(/@charset "UTF-8";/g, ''))
       .pipe(header('@charset "UTF-8";\n\n'))
       .pipe(postcss(postcssOption, [clean()]))
-      //.pipe(gcmq())
       .pipe(
         stripCssComments({
           preserve: false,
@@ -160,6 +171,7 @@ const sassCompress = () => {
       )
       .pipe(replace('\n\n', '\n'))
       .pipe(replace(/^\n/gm, ''))
+      .pipe(cleanCSS())
       .pipe(dest(paths.styles.dest))
   );
 };
@@ -208,6 +220,12 @@ const scripts = () => {
     .pipe(dest(paths.scripts.dest, { sourcemaps: './maps' }));
 };
 
+// Webpack
+const bundleJs = () => {
+  // webpackStreamの第2引数にwebpackを渡す
+  return webpackStream(webpackConfig, webpack).pipe(dest(paths.scripts.dest));
+};
+
 // 画像最適化
 const imageminOption = [
   pngquant({
@@ -219,7 +237,8 @@ const imageminOption = [
   imagemin.gifsicle({
     interlaced: false,
   }),
-  imagemin.jpegtran(),
+  //imagemin.jpegtran(),
+  imagemin.mozjpeg(),
   imagemin.optipng(),
   imagemin.svgo({ removeViewBox: true }, { cleanupIDs: false }),
 ];
@@ -317,6 +336,10 @@ const watchFiles = (done) => {
   );
   watch(paths.scripts.src).on('change', series(scripts, esLint, browserReload));
   watch(paths.scripts.jsx).on('change', series(scripts, esLint, browserReload));
+  watch(paths.scripts.src).on(
+    'change',
+    series(bundleJs, esLint, browserReload)
+  );
   watch(paths.pug.src).on('change', series(pugs, browserReload));
   watch(paths.html.src).on('change', series(html, browserReload));
 };
@@ -327,7 +350,8 @@ exports.default = series(
     images,
     styles,
     javascript,
-    scripts,
+    //scripts,
+    bundleJs,
     pugs,
     html,
     json,
@@ -342,7 +366,9 @@ exports.del = cleanDistFiles;
 exports.build = series(
   parallel(
     cleanDistFiles,
-    scripts,
+    javascript,
+    //scripts,
+    bundleJs,
     images,
     sassCompress,
     pugs,
