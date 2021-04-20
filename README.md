@@ -50,8 +50,7 @@ $ gulp build
 │  ├─ images/
 │  ├─ javascript/
 │  ├─ js/
-│  │  ├─ _app/
-│  │  ├─ _core/
+│  │  ├─ components/
 │  │  └─ functions.js など
 │  ├─ json/
 │  ├─ pug/
@@ -66,11 +65,14 @@ $ gulp build
 │      ├─ style.scss
 │      └─ index.scss
 │
-├─ postcss-sorting.json
 ├─ .eslintrc.json
+├─ .gitignore
+├─ README.md
 ├─ gulpfile.js
 ├─ package.json
-└─ README.md
+├─ postcss-sorting.json
+├─ scss-lint.yml
+└─ webpack.config.js
 ```
 
 ## パッケージのバージョン管理
