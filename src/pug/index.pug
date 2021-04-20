@@ -6,6 +6,7 @@ block vars
     head.slug = 'index'
     head.keywords = 'index, INDEX'
     head.description = 'インデックスなんです...'
+  - var isIndex = true
 
 block append head
   script(src="", async)
@@ -23,7 +24,7 @@ block includes
   include ./_template/parts/article/datas/_index
   include ./_template/parts/article/_article
 
-block body
+block main
 
   main#main.main
     .main__inner
