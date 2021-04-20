@@ -20,7 +20,7 @@
     "babel-loader": "^8.2.2",
     "browser-sync": "^2.26.14",
     "del": "^6.0.0",
-    "eslint": "^7.23.0",
+    "eslint": "^7.24.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
@@ -48,12 +48,12 @@
     "gulp-uglify": "^3.0.2",
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-pngquant": "^9.0.2",
-    "postcss": "^8.2.9",
+    "postcss": "^8.2.10",
     "postcss-assets": "^5.0.0",
     "postcss-clean": "^1.2.2",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-sorting": "^6.0.0",
-    "webpack": "^5.31.0",
+    "webpack": "^5.34.0",
     "webpack-stream": "^6.1.2"
   },
   "browserslist": [
