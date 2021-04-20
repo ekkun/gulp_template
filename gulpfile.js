@@ -336,6 +336,10 @@ const watchFiles = (done) => {
   );
   watch(paths.scripts.src).on('change', series(scripts, esLint, browserReload));
   watch(paths.scripts.jsx).on('change', series(scripts, esLint, browserReload));
+  watch(paths.scripts.src).on(
+    'change',
+    series(bundleJs, esLint, browserReload)
+  );
   watch(paths.pug.src).on('change', series(pugs, browserReload));
   watch(paths.html.src).on('change', series(html, browserReload));
 };
@@ -362,6 +366,7 @@ exports.del = cleanDistFiles;
 exports.build = series(
   parallel(
     cleanDistFiles,
+    javascript,
     //scripts,
     bundleJs,
     images,
