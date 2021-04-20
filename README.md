@@ -51,7 +51,7 @@ $ gulp build
 │  ├─ javascript/
 │  ├─ js/
 │  │  ├─ components/
-│  │  └─ functions.js など
+│  │  └─ main.js
 │  ├─ json/
 │  ├─ pug/
 │  │  ├─ _template/
